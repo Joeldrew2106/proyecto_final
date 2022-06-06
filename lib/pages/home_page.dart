@@ -12,6 +12,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final floatingController = FloatingSearchBarController();
+  final controllerGramos = TextEditingController();
+  double gramos = 50;
   @override
   Widget build(BuildContext context) {
     final ninjaDataServices = Provider.of<Estadisticas>(context);
@@ -34,18 +36,21 @@ class _HomePageState extends State<HomePage> {
         debounceDelay: const Duration(milliseconds: 500),
         onSubmitted: (value) {
           ninjaDataServices.getComplete(value);
+          setState(() {
+            gramos = 50;
+          });
         },
         transition: CircularFloatingSearchBarTransition(),
         actions: [
-          FloatingSearchBarAction(
-              showIfOpened: false, child: const Icon(Icons.search)),
+          const FloatingSearchBarAction(
+              showIfOpened: false, child: Icon(Icons.search)),
           FloatingSearchBarAction.searchToClear(
             showIfClosed: false,
           ),
         ],
         builder: (context, transition) {
           return ClipRRect(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
             child: Material(
                 color: Colors.white,
                 elevation: 4.0,
@@ -58,10 +63,13 @@ class _HomePageState extends State<HomePage> {
                           ninjaDataServices
                               .getFood(ninjaDataServices.listCompleter[index]);
                           floatingController.close();
+                          setState(() {
+                            gramos = 50;
+                          });
                         },
                         child: Container(
-                          color: Color.fromARGB(255, 192, 214, 223),
-                          padding: EdgeInsets.all(10),
+                          color: const Color.fromARGB(255, 192, 214, 223),
+                          padding: const EdgeInsets.all(10),
                           height: 50,
                           child: Text(ninjaDataServices.listCompleter[index]),
                         ),
@@ -73,68 +81,127 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget buildCardFood() {
-      return ninjaDataServices.responseFood == null
+      return ninjaDataServices.alimento == null
           ? Container(
-            height: double.infinity,
-            width: double.infinity,
-            color: Color.fromARGB(255, 234, 234, 234),
-
-
-          )
+              height: double.infinity,
+              width: double.infinity,
+              color: const Color.fromARGB(255, 234, 234, 234),
+            )
           : Container(
-              
-              color: Color.fromARGB(255, 234, 234, 234),
+              padding: const EdgeInsets.all(10),
+              color: const Color.fromARGB(255, 234, 234, 234),
               height: double.infinity,
               width: double.infinity,
               child: Center(
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 150,
                     ),
-
-                    Container(
+                    SizedBox(
                       height: 150,
                       width: double.infinity,
                       child: Row(
                         children: [
                           Expanded(
-                            child: Image.network(ninjaDataServices.responseFood!.image)
-                            ),
-                          Expanded(child: Column(
+                              child: Image.network(
+                                  ninjaDataServices.alimento!.image)),
+                          Expanded(
+                              child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(ninjaDataServices.responseFood!.label),
-                              Row( 
-                                mainAxisAlignment: MainAxisAlignment.center, 
-                                children: [
-                                Text('${ninjaDataServices.responseFood!.nutrients.enercKcal}'),
-                                Icon(Icons.access_alarms)
-
-                              ],
+                              Text(
+                                ninjaDataServices.alimento!.label,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold),
                               ),
-                              Text('Kilo Calorias')
-
+                              Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                          '${ninjaDataServices.alimento!.nutrients.enercKcal! * gramos / 100}'),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      const Icon(
+                                        Icons.whatshot,
+                                        color: Colors.red,
+                                      )
+                                    ],
+                                  ),
+                                  const Text('Calorías'),
+                                ],
+                              ),
                             ],
                           ))
                         ],
                       ),
-
                     ),
-                    Container(
-                      child: Row(
-                        children: [
-                          Expanded(child: Column(
-                            children: [
-                               Icon(Icons.access_alarms),
-                               
-
-                            ],
-                          ))
-                        ],
-                      ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Column(
+                          children: [
+                            const Icon(
+                              Icons.fastfood_outlined,
+                              color: Colors.orange,
+                            ),
+                            Text(
+                                '${ninjaDataServices.alimento!.nutrients.fat! * gramos / 100}'),
+                            const Text('Grasas')
+                          ],
+                        )),
+                        Expanded(
+                            child: Column(
+                          children: [
+                            Icon(
+                              Icons.battery_charging_full_sharp,
+                              color: Colors.yellow.shade600,
+                            ),
+                            Text(
+                                '${ninjaDataServices.alimento!.nutrients.procnt! * gramos / 100}'),
+                            const Text('Proteína')
+                          ],
+                        )),
+                        Expanded(
+                            child: Column(
+                          children: [
+                            Icon(
+                              Icons.breakfast_dining,
+                              color: Colors.brown.shade400,
+                            ),
+                            Text(
+                                '${ninjaDataServices.alimento!.nutrients.chocdf! * gramos / 100}'),
+                            const Text('Carbohidratos')
+                          ],
+                        )),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Column(
+                      children: [
+                        const Text('Gramos:'),
+                        Slider(
+                          min: 50,
+                          value: gramos,
+                          max: 2000,
+                          divisions: 1950,
+                          label: gramos.round().toString(),
+                          onChanged: (double value) {
+                            setState(() {
+                              gramos = value;
+                            });
+                          },
+                        ),
+                      ],
                     )
-                    
                   ],
                 ),
               ),
@@ -146,7 +213,7 @@ class _HomePageState extends State<HomePage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-           Align ( alignment: Alignment.center, child: buildCardFood()),
+          buildCardFood(),
           buildFloatingSearchBar(),
         ],
       ),

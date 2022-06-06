@@ -9,20 +9,26 @@ class Estadisticas extends ChangeNotifier {
   final String _apiKey = '7a87ced9c9ea2d9dcf4bf2a924615aa7';
   final String _appId = '1210fd2a';
   List<String> listCompleter = [];
-  Food? responseFood;
+  Food? alimento;
   List<Parsed> propiedadesAlimentos = [];
 
   getFood(String foodName) async {
-    final url = Uri.https(_urlBase, '/api/food-database/v2/parser', {
-      'app_id': _appId,
-      'app_key': _apiKey,
-      'ingr': foodName,
-      'nutrition': 'cooking'
-    });
-    final respuesta = await http.get(url);
-    final parsed = Alimentos.fromJson(respuesta.body);
-    responseFood = parsed.parsed![0].food;
-    notifyListeners();
+    try {
+      final url = Uri.https(_urlBase, '/api/food-database/v2/parser', {
+        'app_id': _appId,
+        'app_key': _apiKey,
+        'ingr': foodName,
+        'nutrition': 'cooking'
+      });
+      final respuesta = await http.get(url);
+      print(respuesta.body);
+      final parsed = Alimentos.fromJson(respuesta.body);
+
+      alimento = parsed.parsed![0].food;
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 
   getComplete(String input) async {

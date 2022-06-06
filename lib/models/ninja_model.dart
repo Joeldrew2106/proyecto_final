@@ -55,26 +55,23 @@ class Food {
 
 class Nutrients {
   Nutrients({
-    required this.enercKcal,
-    required this.procnt,
-    required this.fat,
-    required this.chocdf,
-    required this.fibtg,
+    this.enercKcal,
+    this.procnt,
+    this.fat,
+    this.chocdf,
   });
 
-  int enercKcal;
-  double procnt;
-  double fat;
-  double chocdf;
-  double fibtg;
+  double? enercKcal;
+  double? procnt;
+  double? fat;
+  double? chocdf;
 
   factory Nutrients.fromJson(String str) => Nutrients.fromMap(json.decode(str));
 
   factory Nutrients.fromMap(Map<String, dynamic> json) => Nutrients(
-        enercKcal: json["ENERC_KCAL"].toInt(),
-        procnt: json["PROCNT"].toDouble(),
-        fat: json["FAT"].toDouble(),
-        chocdf: json["CHOCDF"].toDouble(),
-        fibtg: json["FIBTG"].toDouble(),
+        enercKcal: double.parse(json["ENERC_KCAL"].toString()),
+        procnt: double.parse(json["PROCNT"].toString()),
+        fat: double.parse(json["FAT"].toString()),
+        chocdf: double.parse(json["CHOCDF"].toString()),
       );
 }
