@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                           });
                         },
                         child: Container(
-                          color: const Color.fromARGB(255, 192, 214, 223),
+                          color: Colors.white10,
                           padding: const EdgeInsets.all(10),
                           height: 50,
                           child: Text(ninjaDataServices.listCompleter[index]),
@@ -83,6 +83,38 @@ class _HomePageState extends State<HomePage> {
     Widget buildCardFood() {
       return ninjaDataServices.alimento == null
           ? Container(
+              child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 180,
+                    ),
+                    Expanded(
+                      child: Image(
+                        image: AssetImage(
+                    'assets/calculadora.png'),
+                        height: 300,
+                      ),
+                    ),
+                    
+                    Expanded(child: Column(
+                      children: [
+                        const SizedBox(
+                      height: 30,
+                    ),
+                        Text('Hola, Busca tu alimento y calcula las calorías en base a la cantidad de gramos que consumirás. ',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight:
+                                    FontWeight.bold,
+                                    ),
+                              ),
+                      ],
+                    ))
+                    
+                    
+                  ],
+                  
+                ),
               height: double.infinity,
               width: double.infinity,
               color: const Color.fromARGB(255, 234, 234, 234),

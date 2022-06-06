@@ -21,13 +21,14 @@ class Estadisticas extends ChangeNotifier {
         'nutrition': 'cooking'
       });
       final respuesta = await http.get(url);
-      print(respuesta.body);
+      
       final parsed = Alimentos.fromJson(respuesta.body);
 
       alimento = parsed.parsed![0].food;
+      //print(respuesta.body);
       notifyListeners();
     } catch (e) {
-      print(e);
+      //print(e);
     }
   }
 
